@@ -36,8 +36,8 @@ async function run() {
     app.patch("/addtask/:id", async (req, res) => {
       const id = req.params.id;
       const updateTaskStatus = req.body;
-      console.log("body", updateTaskStatus);
-      console.log("id", id);
+      // console.log("body", updateTaskStatus);
+      // console.log("id", id);
       const filter = { _id: ObjectId(id) };
       const taskStatus = updateTaskStatus.taskStatus;
 
@@ -51,8 +51,26 @@ async function run() {
         filter,
         updatedDoc
       );
-      console.log("updatedTaskStatus", updatedTaskStatus);
+      //console.log("updatedTaskStatus", updatedTaskStatus);
       res.send(updatedTaskStatus);
+    });
+
+    app.patch("/addtask/edit/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateTask = req.body;
+      console.log("body", updateTask);
+      console.log("id", id);
+      const filter = { _id: ObjectId(id) };
+      const taskDescription = updateTask.taskDescription;
+
+      const updatedDoc = {
+        $set: {
+          taskDescription: taskDescription,
+        },
+      };
+      const updatedTask = await taskCollection.updateOne(filter, updatedDoc);
+      console.log("updatedTaskStatus", updatedTask);
+      res.send(updatedTask);
     });
   } finally {
   }
